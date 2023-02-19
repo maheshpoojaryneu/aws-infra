@@ -2,7 +2,7 @@
 resource "aws_subnet" "public_subnets" {
   count             = 3
   cidr_block = "${cidrsubnet(var.cidr_block, 2,count.index + 1)}"
-  availability_zone = element(var.azs, count.index)
+  availability_zone = data.aws_availability_zones.available.names[count.index]
   vpc_id = "${var.vpc_id}"
   tags = {
     Name = " ${var.vpc_name} Public Subnet ${count.index + 1}"
@@ -12,7 +12,7 @@ resource "aws_subnet" "public_subnets" {
 resource "aws_subnet" "private_subnets" {
   count             = 3
   cidr_block        = "${cidrsubnet(var.cidr_block, 8 ,count.index + 1)}"
-  availability_zone = element(var.azs, count.index)
+    availability_zone = data.aws_availability_zones.available.names[count.index]
   vpc_id = "${var.vpc_id}"
   tags = {
     Name = "${var.vpc_name} Private Subnet ${count.index + 1}"
