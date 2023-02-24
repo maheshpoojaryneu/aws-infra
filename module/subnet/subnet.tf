@@ -4,6 +4,7 @@ resource "aws_subnet" "public_subnets" {
   cidr_block = "${cidrsubnet(var.cidr_block, 2,count.index + 1)}"
   availability_zone = data.aws_availability_zones.available.names[count.index]
   vpc_id = "${var.vpc_id}"
+  map_public_ip_on_launch = true
   tags = {
     Name = " ${var.vpc_name} Public Subnet ${count.index + 1}"
   }
