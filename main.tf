@@ -18,9 +18,61 @@ module "subnet" {
   vpc_name   = var.vpc_name
 }
 
+module "sg" {
+  source = "./module/sg"
+  vpc_id = module.VPC.aws_vpc_id
+
+  depends_on = [
+    module.VPC,
+  ]
+}
 module "ec2" {
-  source  = "./module/ec2"
-  ami_id  = var.ami_id
-  subnets = keys(module.subnet.vpc_public_subnets)
-  vpc_id  = module.VPC.aws_vpc_id
+
+  depends_on = [
+    module.VPC,
+    module.subnet,
+    module.sg,
+    module.s3,
+    module.db,
+  ]
+  source                 = "./module/ec2"
+  ami_id                 = var.ami_id
+  subnets                = keys(module.subnet.vpc_public_subnets)
+  vpc_id                 = module.VPC.aws_vpc_id
+  vpc_security_group_ids = module.sg.vpc_security_group_ids
+  iam_instance_profile   = module.policy.iam_instance_profile
+  aws_s3_bucket_name     = module.s3.aws_s3_bucket_name
+}
+
+module "db" {
+
+  depends_on = [
+    module.VPC,
+    module.subnet,
+    module.sg,
+
+  ]
+
+  source            = "./module/db"
+  subnets           = keys(module.subnet.vpc_public_subnets)
+  security_group_id = module.sg.security_group_id
+  vpc_id            = module.VPC.aws_vpc_id
+}
+
+module "s3" {
+  depends_on = [
+
+  ]
+  source = "./module/s3"
+
+
+}
+
+module "policy" {
+  source = "./module/policy"
+  depends_on = [module.s3,
+
+  ]
+  bucketarn = module.s3.bucketarn
+
 }
