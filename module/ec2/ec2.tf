@@ -17,7 +17,6 @@ resource "aws_instance" "ec2" {
   disable_api_termination = false
   iam_instance_profile    = var.iam_instance_profile
   subnet_id               = random_shuffle.subnets.result[0]
-
   user_data = <<EOF
 
 #!/bin/bash
