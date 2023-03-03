@@ -3,26 +3,28 @@ resource "aws_iam_policy" "bucket_policy" {
   description = "Allow "
 
   policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-
-        "Effect" : "Allow",
-        "Action" : [
-          "s3:AbortMultipartUpload",
-          "s3:DeleteObject",
-          "s3:ListMultipartUploadParts",
-          "s3:PutObject",
-          "s3:GetObject",
-          "s3:ListObject"
-        ],
-        "Resource" : [
-          "arn:aws:s3:::${var.bucketarn}",
-          "arn:aws:s3:::${var.bucketarn}/*"
-        ]
-      }
-    ]
-  })
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ListObjectsInBucket",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "${var.bucketarn}"
+      ]
+    },
+    {
+      "Sid": "AllObjectActions",
+      "Effect": "Allow",
+      "Action": "s3:*Object*",
+      "Resource": [
+        "${var.bucketarn}/*"
+      ]
+    }
+  ]
+})
 }
 
 resource "aws_iam_role" "webaccess_role" {
