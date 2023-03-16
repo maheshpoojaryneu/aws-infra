@@ -9,3 +9,5 @@ variable "vpc_name" {
 variable "ami_id" {
 }
 
+variable "zone_name" {
+}
