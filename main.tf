@@ -76,3 +76,14 @@ module "policy" {
   bucketarn = module.s3.bucketarn
 
 }
+
+module "route53" {
+
+  source = "./module/route53"
+  ec2_ip = module.ec2.instance_public_ip
+  zone_name = var.zone_name
+  depends_on = [
+    module.ec2,
+  ]
+
+}
