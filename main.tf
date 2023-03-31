@@ -79,8 +79,8 @@ module "policy" {
 
 module "route53" {
 
-  source = "./module/route53"
-  ec2_ip = module.ec2.instance_public_ip
+  source    = "./module/route53"
+  ec2_ip    = module.ec2.instance_public_ip
   zone_name = var.zone_name
   depends_on = [
     module.ec2,
