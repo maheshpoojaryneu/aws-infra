@@ -1,3 +1,4 @@
+Terraform code will build a new VPC, 3 private and public subnets, ec2, security group, policies, s3, db and route 53 which will create an A record so that the application will be accessible with the A record.
 
 1)	Create an IAM user with your AWS account and generate access keys for that user which can be used to setup AWS CLI.
 Link: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-prereqs.html
@@ -31,7 +32,7 @@ Enter Access key name
 Enter Access key 
 
 6)	Once the profile is setup, download the files from github and run ‘terraform init’ in the folder where the files are placed.
-7)	After initializing terraform, you can run ‘terraform plan’  to generate a plan for the defined modules so that you can have details on which resources are being created. After running the plan command enter the region for AWS on which you need to create the infrastructure then enter VPC name, CIDR block for the VPC and the name of the profile to create the infrastructure under that account.
+7)	After initializing terraform, you can run ‘terraform plan’  to generate a plan for the defined modules so that you can have details on which resources are being created. After running the plan command enter the region for AWS on which you need to create the infrastructure then enter VPC name, CIDR block for the VPC, AWS Region, zone name and the name of the profile to create the infrastructure under that account.
 8)	Once the plan is generated, run ‘terraform apply’ to create the infrastructure on AWS.
 9)	You can login to AWS account to verify or run terraform state list to get the meta data of the resources created.
 10)	If you want to create another infrastructure using the same config files, run terraform workspace new ‘workspacename’ and follow steps from 6-9. 
