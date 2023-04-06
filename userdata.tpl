@@ -1,30 +1,3 @@
-
-resource "random_shuffle" "subnets" {
-  input        = var.subnets
-  result_count = 1
-}
-
-
-
-
-
-
-resource "aws_instance" "ec2" {
-  ami                     = var.ami_id
-  instance_type           = "t2.micro"
-  key_name                = var.key_name
-  vpc_security_group_ids  = [var.vpc_security_group_ids]
-  disable_api_termination = true
-  iam_instance_profile    = var.iam_instance_profile
-  subnet_id               = random_shuffle.subnets.result[0]
-  tags = {
-    Name = "ec2 instance"
-  }
-
-
-  user_data = <<EOF
-
-
 #!/bin/bash
 
 touch /home/ec2-user/application.properties
@@ -50,15 +23,3 @@ sudo systemctl start webapp
 sudo systemctl enable amazon-cloudwatch-agent.service 
 sudo systemctl start amazon-cloudwatch-agent.service
 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/home/ec2-user/webapp/config.json -s
-
-
-  EOF
-
-  root_block_device {
-    volume_size = 50
-    volume_type = "gp2"
-
-  }
-
-
-}

@@ -26,23 +26,23 @@ module "sg" {
     module.VPC,
   ]
 }
-module "ec2" {
+# module "ec2" {
 
-  depends_on = [
-    module.VPC,
-    module.subnet,
-    module.sg,
-    module.s3,
-    module.db,
-  ]
-  source                 = "./module/ec2"
-  ami_id                 = var.ami_id
-  subnets                = keys(module.subnet.vpc_public_subnets)
-  vpc_id                 = module.VPC.aws_vpc_id
-  vpc_security_group_ids = module.sg.vpc_security_group_ids
-  iam_instance_profile   = module.policy.iam_instance_profile
-  aws_s3_bucket_name     = module.s3.aws_s3_bucket_name
-}
+#   depends_on = [
+#     module.VPC,
+#     module.subnet,
+#     module.sg,
+#     module.s3,
+#     module.db,
+#   ]
+#   source                 = "./module/ec2"
+#   ami_id                 = var.ami_id
+#   subnets                = keys(module.subnet.vpc_public_subnets)
+#   vpc_id                 = module.VPC.aws_vpc_id
+#   vpc_security_group_ids = module.sg.vpc_security_group_ids
+#   iam_instance_profile   = module.policy.iam_instance_profile
+#   aws_s3_bucket_name     = module.s3.aws_s3_bucket_name
+# }
 
 module "db" {
 
@@ -80,10 +80,31 @@ module "policy" {
 module "route53" {
 
   source    = "./module/route53"
-  ec2_ip    = module.ec2.instance_public_ip
+  # ec2_ip    = module.ec2.instance_public_ip
   zone_name = var.zone_name
   depends_on = [
-    module.ec2,
+    module.loadbalancer,
   ]
 
+}
+
+module "loadbalancer" {
+  iam_instance_profile   = module.policy.iam_instance_profile
+  ami_id = var.ami_id
+  source = "./module/loadbalancer"
+  vpc_id = module.VPC.aws_vpc_id
+  vpc_zone_identifier = keys(module.subnet.vpc_public_subnets)
+  security_group_id = module.sg.loadbalancer_group_id
+  publicsubnets = keys(module.subnet.vpc_public_subnets)
+  aws_s3_bucket_name     = module.s3.aws_s3_bucket_name
+  vpc_security_group_ids = module.sg.vpc_security_group_ids
+
+depends_on = [
+    module.VPC,
+    module.subnet,
+    module.sg,
+    module.s3,
+    module.db,
+    module.policy,
+  ]
 }
