@@ -1,4 +1,4 @@
-Terraform code will build a new VPC, 3 private and public subnets, ec2, security group, policies, s3, db and route 53 which will create an A record so that the application will be accessible with the A record.
+Terraform code will build a new VPC, 3 private and public subnets, ec2, security group, policies, s3, db, load balancer, autoscaling group and policy, and route 53 which will create an A record along with alias so that the application will be accessible with alias.
 
 1)	Create an IAM user with your AWS account and generate access keys for that user which can be used to setup AWS CLI.
 Link: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-prereqs.html
