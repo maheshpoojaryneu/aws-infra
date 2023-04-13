@@ -11,10 +11,10 @@ resource "aws_route53_record" "webapprecord" {
   type    = "A"
   #records = [data.aws_lb.webapplb.dns_name]
 
-alias {
-  zone_id = data.aws_lb.webapplb.zone_id
-  name    = data.aws_lb.webapplb.dns_name
-  evaluate_target_health = true
-}
+  alias {
+    zone_id                = data.aws_lb.webapplb.zone_id
+    name                   = data.aws_lb.webapplb.dns_name
+    evaluate_target_health = true
+  }
 
 }

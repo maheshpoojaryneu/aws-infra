@@ -6,6 +6,6 @@ variable "zone_name" {
 }
 data "aws_lb" "webapplb" {
 
-name = "webapplb"
+  name = "webapplb"
 
 }
